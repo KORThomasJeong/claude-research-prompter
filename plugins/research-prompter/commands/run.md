@@ -56,7 +56,8 @@ argument-hint: "[--light|--full] [브리프 파일 경로 (생략 시 최신 브
 3. **Obsidian 저장** (설정 시): 프로젝트 루트 또는 홈의 `.research-prompter.json`에서
    `obsidian_vault_path`를 읽는다. 설정이 없으면 한 번 물어보고, 원하면
    `~/.research-prompter.json`에 저장해 재사용한다.
-   볼트의 `Research/` 폴더에 보고서를 복사하되 frontmatter(tags: [research, 유형태그],
+   저장 하위 폴더는 같은 파일의 `obsidian_research_folder`를 따르며, 없으면 `Research`가 기본값이다.
+   볼트의 `<obsidian_research_folder>/` 폴더에 보고서를 복사하되 frontmatter(tags: [research, 유형태그],
    date, source: research-prompter)를 추가하고, 보고서 내 핵심 개념에 [[위키링크]]를 건다.
 
 ## 4단계 — 검증 안내

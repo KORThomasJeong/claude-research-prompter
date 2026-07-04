@@ -61,10 +61,12 @@ docs/research/
 **Obsidian 연동**: 프로젝트 루트 또는 `~/.research-prompter.json`에
 
 ```json
-{ "obsidian_vault_path": "/path/to/vault" }
+{ "obsidian_vault_path": "/path/to/vault", "obsidian_research_folder": "Research" }
 ```
 
-를 두면 보고서가 볼트 `Research/`에 frontmatter·위키링크와 함께 저장됩니다.
+를 두면 보고서가 볼트의 지정 폴더에 frontmatter·위키링크와 함께 저장됩니다.
+`obsidian_research_folder`는 선택값이며, 생략 시 `Research`가 기본값입니다
+(볼트가 번호 접두사 컨벤션을 쓰면 `"50-Research"` 등으로 지정).
 
 ## 구조
 
