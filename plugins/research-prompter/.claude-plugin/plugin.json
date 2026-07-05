@@ -1,7 +1,7 @@
 {
   "name": "research-prompter",
   "description": "리서치 유형별 심층 연구 설계·실행 플러그인. 8개 유형(기술검증, 시장·경쟁, 도입타당성, 투자판단, 경영진보고, 탐색학습, 학술연구, 자녀교육)의 MECE 브리프를 설계하고, 셀 단위 병렬 조사 → 종합 → 레드팀 검증까지 자동화한다. 결과는 docs/research/ 및 (설정 시) Obsidian 볼트에 저장.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "KORThomasJeong"
   }
