@@ -19,6 +19,17 @@ Claude Code용 **리서치 설계·실행 플러그인** — 리서치 유형을
 | 7 | 학술 연구형 (대학원) | 문헌 매트릭스 + 연구 갭 |
 | 8 | 자녀 교육형 (초·중등) | 부모용 지도 가이드 + 활동 계획 |
 
+**2개 수집 프로토콜** (유형과 직교 — 겹쳐서 씁니다)
+
+| 프로토콜 | 다루는 것 | 주 소스 |
+|---|---|---|
+| `kr-academic` | 국내 논문·학위논문·국가R&D보고서 | KCI, ScienceON, Crossref, OpenAlex |
+| `epc` | 건설·계약·발주 동향·표준 (회색문헌) | CODIL, 공공데이터포털, ENR, IEA, World Bank |
+
+유형이 **"무엇을 답할지"**를 정한다면, 프로토콜은 **"근거를 어디서 어떻게 긁어올지"**를 정합니다.
+검색엔진 대신 API(`curl`)로 서지를 확정하므로 환각 인용이 줄고, WebSearch 한도를 아껴
+회색문헌 탐색에 집중할 수 있습니다.
+
 이 저장소는 **Claude Code 플러그인 마켓플레이스**입니다.
 
 ## 설치
@@ -38,6 +49,37 @@ Claude Code용 **리서치 설계·실행 플러그인** — 리서치 유형을
 ```
 
 자연어로 "이 주제 리서치 설계해줘"라고 해도 동작합니다.
+수집만 필요하면 `research-sources` 스킬이 단독으로도 뜹니다 — "KCI에서 이 주제 논문 찾아줘",
+"이 DOI 서지 확정해줘", "CODIL 자료 찾아줘" 같은 요청에 반응합니다.
+
+### 수집 프로토콜 설정 (권장)
+
+프로토콜의 수집 경로는 대부분 `curl`입니다. **권한이 없으면 실행되지 않습니다.**
+
+```bash
+# 저장소의 settings.sample.json 을 프로젝트 설정에 병합
+cp settings.sample.json .claude/settings.json
+```
+
+**실제 API 키는 `settings.json`에 넣지 마세요.** gitignore된 `.claude/settings.local.json`
+또는 셸 환경변수에 둡니다. 키 없이도 OpenAlex + Crossref + Semantic Scholar +
+KCI OAI-PMH 조합으로 시작할 수 있습니다.
+
+| 환경변수 | 발급처 | 없으면 |
+|---|---|---|
+| `CONTACT_EMAIL` | (본인 이메일) | polite pool 밖 — 레이트리밋 |
+| `KCI_API_KEY` | https://open.kci.go.kr/ | OAI-PMH로 대체 가능 |
+| `SCIENCEON_CLIENT_ID` / `SCIENCEON_TOKEN` | https://scienceon.kisti.re.kr/apigateway/api/way/guide.do | 프로시딩·국가R&D보고서 누락 |
+| `DATA_GO_KR_KEY` | https://www.data.go.kr | 발주 정량 데이터 누락 |
+| `CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` | (설정값) | `epc` 프로토콜은 상향 권장 |
+
+### 스킬만 단독으로 쓰기
+
+플러그인 없이 수집 프로토콜만 쓰려면 스킬 디렉토리를 복사합니다.
+
+```bash
+cp -r plugins/research-prompter/skills/research-sources ~/.claude/skills/
+```
 
 **실행 경로는 유형별로 다르게 안내됩니다** — 모든 리서치를 자동 실행하지 않습니다.
 
@@ -77,10 +119,18 @@ claude-research-prompter/
     ├── .claude-plugin/plugin.json
     ├── commands/{design,run,verify}.md
     ├── agents/{cell-researcher,synthesizer,red-teamer}.md
-    └── skills/research-design/
-        ├── SKILL.md                    # 라우터 + 실행 적합도 표
-        └── references/01~08-*.md       # 유형별 템플릿 (progressive disclosure)
+    └── skills/
+        ├── research-design/            # "무엇을 답할지"
+        │   ├── SKILL.md                # 유형 라우터 + 실행 적합도 표
+        │   └── references/01~08-*.md   # 유형별 템플릿
+        └── research-sources/           # "근거를 어디서 긁어올지"
+            ├── SKILL.md                # 수집 라우터 + 공통 절대 규칙
+            ├── domains/{kr-academic,epc}.md   # 예산·순서·출처 등급
+            └── sources/*.md            # 소스별 curl 호출법·함정
 ```
+
+`domains/`는 **판단**(예산 배분, 수집 순서, 출처 등급)을, `sources/`는 **호출법**을 담습니다.
+OpenAlex·Crossref처럼 두 도메인이 공유하는 소스는 `sources/`에 한 번만 존재합니다.
 
 ## 라이선스
 
@@ -102,6 +152,13 @@ hallucinated-citation detection).
 /plugin marketplace add KORThomasJeong/claude-research-prompter
 /plugin install research-prompter@claude-research-prompter
 ```
+
+It also ships two **source-acquisition protocols** that are orthogonal to the 8 types:
+`kr-academic` (KCI / ScienceON / Crossref / OpenAlex) and `epc` (CODIL, data.go.kr, ENR,
+IEA, World Bank). Types decide *what to answer*; protocols decide *where evidence comes from
+and how to fetch it* — via APIs (`curl`) rather than a search engine, which cuts hallucinated
+citations and preserves the WebSearch budget for grey literature. Copy `settings.sample.json`
+into `.claude/settings.json` to grant the required permissions.
 
 Outputs: Korean report + machine-readable `research.json` under `docs/research/`,
 optionally mirrored into an Obsidian vault (`~/.research-prompter.json`).

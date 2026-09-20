@@ -1,0 +1,55 @@
+{
+  "_comment": "샘플입니다. .claude/settings.json 에 병합하세요. 실제 API 키는 이 파일이 아니라 gitignore된 .claude/settings.local.json 또는 셸 환경변수에 둡니다.",
+
+  "env": {
+    "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": "500",
+    "CONTACT_EMAIL": "your.email@example.com",
+
+    "KCI_API_KEY": "",
+    "SCIENCEON_CLIENT_ID": "",
+    "SCIENCEON_TOKEN": "",
+    "DATA_GO_KR_KEY": ""
+  },
+
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(curl:*)",
+      "Bash(xmllint:*)",
+      "Bash(jq:*)",
+      "Bash(python3:*)",
+
+      "WebFetch(domain:api.crossref.org)",
+      "WebFetch(domain:api.openalex.org)",
+      "WebFetch(domain:api.semanticscholar.org)",
+      "WebFetch(domain:www.ebi.ac.uk)",
+      "WebFetch(domain:eutils.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:doi.org)",
+      "WebFetch(domain:arxiv.org)",
+
+      "WebFetch(domain:open.kci.go.kr)",
+      "WebFetch(domain:www.kci.go.kr)",
+      "WebFetch(domain:apigateway.kisti.re.kr)",
+      "WebFetch(domain:scienceon.kisti.re.kr)",
+      "WebFetch(domain:www.riss.kr)",
+
+      "WebFetch(domain:www.data.go.kr)",
+      "WebFetch(domain:apis.data.go.kr)",
+      "WebFetch(domain:www.codil.or.kr)",
+      "WebFetch(domain:www.law.go.kr)",
+      "WebFetch(domain:kosis.kr)",
+      "WebFetch(domain:www.icak.or.kr)",
+      "WebFetch(domain:www.cerik.re.kr)",
+      "WebFetch(domain:www.molit.go.kr)",
+
+      "WebFetch(domain:www.iea.org)",
+      "WebFetch(domain:www.irena.org)",
+      "WebFetch(domain:www.enr.com)",
+      "WebFetch(domain:www.constructiondive.com)",
+      "WebFetch(domain:projects.worldbank.org)",
+      "WebFetch(domain:api.worldbank.org)",
+      "WebFetch(domain:www.iso.org)",
+      "WebFetch(domain:www.fidic.org)"
+    ]
+  }
+}
